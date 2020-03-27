@@ -11,12 +11,18 @@ const app = express();
 
 app.use(logger("dev"));
 
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({
+    extended: true
+}));
 app.use(express.json());
 
 app.use(express.static("public"));
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false
+});
 
 // HTML Routes //
 
@@ -34,7 +40,42 @@ app.get("/stats", (req, res) => {
 
 // API Routes //
 
+app.get("/api/workouts", (req, res) => {
+    db.Workout.find({})
+        .then(dbWorkout => {
+            res.json(dbWorkout);
+        });
+});
+
+app.get("/api/workouts/range", (req, res) => {
+    db.Workout.find({})
+        .then(dbWorkout => {
+            res.json(dbWorkout);
+        });
+});
+
+app.put("/api/workouts/:id", (req, res) => {
+    console.log(req.body)
+    db.Workout.create(req.body).then(newExercise => {
+        console.log(newExercise)
+    
+        db.Workout.findOneAndUpdate({ _id: mongoose.Types.ObjectId(req.params.id) }, {$set:{exercises: req.body}})
+            .then(dbWorkout => {
+                res.json(dbWorkout);
+            });
+        });
+});
+
+app.post("/api/workouts/", ({ body }, res) => {
+    db.Workout.create(body)
+        .then(dbWorkout => {
+            res.json(dbWorkout);
+        })
+        .catch(err => {
+            res.status(400).json(err);
+        });
+});
 
 app.listen(PORT, () => {
     console.log(`App running on port ${PORT}!`);
-  });
+});
