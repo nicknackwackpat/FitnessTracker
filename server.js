@@ -18,7 +18,7 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {
+mongoose.connect(process.env.MONGODB_URI || "mongodb://nicknackwackpat:Biacxv448!@ds145292.mlab.com:45292/heroku_frkmq98n", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false
@@ -43,19 +43,32 @@ app.get("/stats", (req, res) => {
 app.get("/api/workouts", (req, res) => {
     db.Workout.find({})
         .then(dbWorkout => {
-            res.json(dbWorkout);
+            console.log(dbWorkout[0].getTotalDuration)
+            let processed = dbWorkout.map(workout=>{
+                let newWorkout = workout.toJSON({virtuals:true})
+                // {};
+                // for (value in workout){
+                //     newWorkout[value]=workout[value]
+                // }
+                newWorkout.totalDuration = workout.getTotalDuration;
+                // console.log(newWorkout);
+                return newWorkout;
+            })
+            // console.log(processed);
+            res.json(processed);
         });
 });
 
 app.get("/api/workouts/range", (req, res) => {
     db.Workout.find({})
+    .populate("exercises")
         .then(dbWorkout => {
             res.json(dbWorkout);
         });
 });
 
 app.put("/api/workouts/:id", (req, res) => {
-    console.log(req.body)
+    // console.log(req.body)
     db.Workout.create(req.body).then(newExercise => {
         console.log(newExercise)
     
@@ -67,7 +80,11 @@ app.put("/api/workouts/:id", (req, res) => {
 });
 
 app.post("/api/workouts/", ({ body }, res) => {
+    // db.Workout.getTotalDuration();
+    // db.Workout.getTotalWeight();
+
     db.Workout.create(body)
+
         .then(dbWorkout => {
             res.json(dbWorkout);
         })

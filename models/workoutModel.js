@@ -20,20 +20,32 @@ const WorkoutSchema = new Schema({
       type: Number,
       required: true
     },
-    weight: {
-      type: Number,
-    },
-    sets: {
-      type: Number,
-    },
-    reps: {
-      type: Number,
-    },
-    distance: {
-      type: Number,
-    },
+
+    weight: Number,
+    reps: Number,
+    sets: Number,
+    distance: Number
+
   }],
 });
+
+WorkoutSchema.virtual("getTotalDuration").get( function () {
+  this.totalDuration =0;
+  for (let i = 0; i < this.exercises.length; i++) {
+    this.totalDuration += this.exercises[i].duration;
+
+  }
+  return this.totalDuration;
+});
+
+// WorkoutSchema.methods.getTotalWeight = function() {
+//   for (i = 0; i < exercises.length; i++) {
+//     let totalWeight = this.weight++;
+
+//     return totalWeight;
+//   }
+// }
+
 
 const Workout = mongoose.model("Workout", WorkoutSchema);
 
