@@ -2,5 +2,4 @@
 
 module.exports = {
     Workout: require("./WorkoutModel"),
-    // Exercise: require("./ExerciseModel")
   };

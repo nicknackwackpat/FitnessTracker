@@ -38,15 +38,6 @@ WorkoutSchema.virtual("getTotalDuration").get( function () {
   return this.totalDuration;
 });
 
-// WorkoutSchema.methods.getTotalWeight = function() {
-//   for (i = 0; i < exercises.length; i++) {
-//     let totalWeight = this.weight++;
-
-//     return totalWeight;
-//   }
-// }
-
-
 const Workout = mongoose.model("Workout", WorkoutSchema);
 
 module.exports = Workout;

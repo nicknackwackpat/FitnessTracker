@@ -61,7 +61,6 @@ app.get("/api/workouts", (req, res) => {
 
 app.get("/api/workouts/range", (req, res) => {
     db.Workout.find({})
-    .populate("exercises")
         .then(dbWorkout => {
             res.json(dbWorkout);
         });
@@ -80,8 +79,6 @@ app.put("/api/workouts/:id", (req, res) => {
 });
 
 app.post("/api/workouts/", ({ body }, res) => {
-    // db.Workout.getTotalDuration();
-    // db.Workout.getTotalWeight();
 
     db.Workout.create(body)
 
