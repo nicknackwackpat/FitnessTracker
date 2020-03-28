@@ -46,15 +46,9 @@ app.get("/api/workouts", (req, res) => {
             console.log(dbWorkout[0].getTotalDuration)
             let processed = dbWorkout.map(workout=>{
                 let newWorkout = workout.toJSON({virtuals:true})
-                // {};
-                // for (value in workout){
-                //     newWorkout[value]=workout[value]
-                // }
                 newWorkout.totalDuration = workout.getTotalDuration;
-                // console.log(newWorkout);
                 return newWorkout;
             })
-            // console.log(processed);
             res.json(processed);
         });
 });
@@ -67,7 +61,6 @@ app.get("/api/workouts/range", (req, res) => {
 });
 
 app.put("/api/workouts/:id", (req, res) => {
-    // console.log(req.body)
     db.Workout.create(req.body).then(newExercise => {
         console.log(newExercise)
     
@@ -79,7 +72,6 @@ app.put("/api/workouts/:id", (req, res) => {
 });
 
 app.post("/api/workouts/", ({ body }, res) => {
-
     db.Workout.create(body)
 
         .then(dbWorkout => {
